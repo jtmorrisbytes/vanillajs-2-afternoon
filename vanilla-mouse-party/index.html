@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Mouse Party</title>
   </head>
@@ -69,7 +72,7 @@
       return Math.round(Math.random() * (max - min + 1)) + min;
     }
 
-    function mousePartyListener(mouseEvent) {
+    function updateMousePosition(mouseEvent) {
       mousePosition.x = mouseEvent.pageX;
       mousePosition.y = mouseEvent.pageY;
     }
@@ -78,7 +81,7 @@
     // wait to add the mousemove listener until a mouseEnter event fires
     // indicating that the user active
 
-    window.addEventListener("mousemove", mousePartyListener);
+    window.addEventListener("mousemove", updateMousePosition);
     function draw() {
       return setInterval(() => {
         const color = `background:rgb(${getRandomNumber(
@@ -110,5 +113,16 @@
     window.addEventListener("mouseout", () => {
       clearInterval(drawId);
     });
+    // my basic attempts to get this working on mobile
+    // resulted in the balls getting placed in the center
+    // of the page.
+    // I am out of time for right now, so I will continue this
+    // later
+    window.addEventListener("touchstart", () => (drawId = draw()));
+    window.addEventListener("touchmove", updateMousePosition);
+    window.addEventListener("touchend", () => {
+      window.removeEventListener("touchmove", updateMousePosition);
+    });
+    window.addEventListener("touchend", () => clearInterval(drawId));
   </script>
 </html>

@@ -64,7 +64,7 @@
     };
     // store the setInterval ID so we can clear it when the user's attention
     // goes away from the webpage or the mouse goes outside the target element
-    let setDrawId;
+    let drawId;
     function getRandomNumber(min, max) {
       return Math.round(Math.random() * (max - min + 1)) + min;
     }
@@ -72,23 +72,43 @@
     function mousePartyListener(mouseEvent) {
       mousePosition.x = mouseEvent.pageX;
       mousePosition.y = mouseEvent.pageY;
-      console.log(" recieved the mouse event");
     }
-    window.mousePartyListener = mousePartyListener;
-    function startMouseParty(event) {
-      console.log("mouse party started");
-      wrapDiv.addEventListener("mousemove", mousePartyListener);
-      wrapDiv.style.backgroundColor = "white";
-    }
-    function endMouseParty(event) {
-      wrapDiv.removeEventListener("mousemove", mousePartyListener);
-    }
-
     // grab the container we are operating on
-    let wrapDiv = document.querySelector("div#wrap");
+    let container = document.querySelector("div#wrap");
     // wait to add the mousemove listener until a mouseEnter event fires
     // indicating that the user active
 
-    wrapDiv.addEventListener("mousemove", mousePartyListener);
+    window.addEventListener("mousemove", mousePartyListener);
+    function draw() {
+      return setInterval(() => {
+        const color = `background:rgb(${getRandomNumber(
+          0,
+          255
+        )},${getRandomNumber(0, 255)}, ${getRandomNumber(0, 255)});`;
+        const ballSize = getRandomNumber(10, 30);
+        const size = `height:${ballSize}px; width:${ballSize}px;`;
+        const left = `left:${getRandomNumber(
+          mousePosition.x - ballSize,
+          mousePosition.x
+        )}px;`;
+        const top = `top:${getRandomNumber(
+          mousePosition.y - ballSize,
+          mousePosition.y
+        )}px; `;
+        const style = `${left}${top}${color}${size}`;
+        let ball = document.createElement("div");
+        ball.classList.add("ball");
+        ball.style = style;
+        ball.onanimationend = e => e.target.remove();
+
+        container.appendChild(ball);
+      }, 1 / 60);
+    }
+    window.addEventListener("mouseover", () => {
+      drawId = draw();
+    });
+    window.addEventListener("mouseout", () => {
+      clearInterval(drawId);
+    });
   </script>
 </html>

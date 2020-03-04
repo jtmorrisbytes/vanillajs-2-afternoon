@@ -68,5 +68,27 @@
     function getRandomNumber(min, max) {
       return Math.round(Math.random() * (max - min + 1)) + min;
     }
+
+    function mousePartyListener(mouseEvent) {
+      mousePosition.x = mouseEvent.pageX;
+      mousePosition.y = mouseEvent.pageY;
+      console.log(" recieved the mouse event");
+    }
+    window.mousePartyListener = mousePartyListener;
+    function startMouseParty(event) {
+      console.log("mouse party started");
+      wrapDiv.addEventListener("mousemove", mousePartyListener);
+      wrapDiv.style.backgroundColor = "white";
+    }
+    function endMouseParty(event) {
+      wrapDiv.removeEventListener("mousemove", mousePartyListener);
+    }
+
+    // grab the container we are operating on
+    let wrapDiv = document.querySelector("div#wrap");
+    // wait to add the mousemove listener until a mouseEnter event fires
+    // indicating that the user active
+
+    wrapDiv.addEventListener("mousemove", mousePartyListener);
   </script>
 </html>
